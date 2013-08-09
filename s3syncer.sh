@@ -1,9 +1,10 @@
 #!/bin/bash
 
-#This scripts installs and config's s3cmd
-#Parses the '&' delimited file 'accounts' to get RightScale Account Number (accountnum) and corresponding AWS Key & Secret Key
+#Written by John Fitzpatrick
+
+#This script installs and config's s3cmd 
+#It then parses the ('&' delimited) file 'accounts' to get RightScale Account Number (accountnum) and corresponding AWS Key & Secret Key
 #Then uploads the contents of 'labfiles' directory to a bucket in this account called 'rsed-accountnum'
-#John Fitzpatrick
 
 echo "Install S3 Tools"
 yum -y install s3cmd
