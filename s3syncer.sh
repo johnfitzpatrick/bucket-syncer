@@ -6,7 +6,6 @@
 #John Fitzpatrick
 
 echo "Install S3 Tools"
-cd /root
 yum -y install s3cmd
 
 cat > /root/.s3cfg << EOF
