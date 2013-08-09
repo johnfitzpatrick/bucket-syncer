@@ -80,11 +80,10 @@ grep key /root/.s3cfg
 echo "Now the for loop!!!!!"
 
 for file in `ls labfiles` 
-do
-echo
-echo labfiles/$file
+ do
 
 #Lets check the file for a laugh
+echo labfiles/$file
 file labfiles/$file
 
 echo "running s3cmd for file $file using this command"
