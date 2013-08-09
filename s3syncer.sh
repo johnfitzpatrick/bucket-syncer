@@ -1,9 +1,13 @@
 #!/bin/bash
 
+#This scripts installs and config's s3cmd
+#Parses the '&' delimited file 'accounts' to get RightScale Account Number (accountnum) and corresponding AWS Key & Secret Key
+#Then uploads the contents of 'labfiles' directory to a bucket in this account called 'rsed-accountnum'
+#John Fitzpatrick
+
 echo "Install S3 Tools"
 cd /root
 yum -y install s3cmd
-
 
 cat > /root/.s3cfg << EOF
 [default]
@@ -47,21 +51,20 @@ verbosity = WARNING
 
 EOF
 
+#Read the file accounts
 while read line           
 do           
     account=`echo -e "$line"| awk '{split($0,array,"&")} END{print array[1]}'`
     key=`echo -e "$line"| awk '{split($0,array,"&")} END{print array[2]}'`
-    secret=`echo -e "$line"| awk '{split($0,array,"&")} END{print array[3]}'`
-    
+    secret=`echo -e "$line"| awk '{split($0,array,"&")} END{print array[3]}'`    
     bucket=rsed-$account
-    echo "+++"
 
     echo "Account is $account"
     echo "Key is $key"
     echo "Secret is $secret"
     echo "Bucket is $bucket"
 
-echo "Configuring s3cmd for the account"
+echo "Configuring s3cmd for this account"
 cp /root/.s3cfg /root/.s3cfg.ORIG
 sed '/access_key/d' /root/.s3cfg
 sed '/secret_key/d' /root/.s3cfg
@@ -80,14 +83,15 @@ for file in `ls labfiles`
 do
 echo
 echo labfiles/$file
-#See if its a real file
-wc labfiles/$file
 
-echo "running s3cmd for file"
+#Lets check the file for a laugh
+file labfiles/$file
+
+echo "running s3cmd for file $file using this command"
 echo "s3cmd -v put labfiles/$file s3://$bucket/$file"
-   s3cmd -v put labfiles/$file s3://$bucket/$file
+s3cmd -v put labfiles/$file s3://$bucket/$file
 
-  done
+done
 
 cp /root/.s3cfg.ORIG /root/.s3cfg
 
