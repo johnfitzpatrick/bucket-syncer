@@ -54,44 +54,43 @@ EOF
 #Read the file accounts
 while read line           
 do           
-    account=`echo -e "$line"| awk '{split($0,array,"&")} END{print array[1]}'`
-    key=`echo -e "$line"| awk '{split($0,array,"&")} END{print array[2]}'`
-    secret=`echo -e "$line"| awk '{split($0,array,"&")} END{print array[3]}'`    
-    bucket=rsed-$account
+ account=`echo -e "$line"| awk '{split($0,array,"&")} END{print array[1]}'`
+ key=`echo -e "$line"| awk '{split($0,array,"&")} END{print array[2]}'`
+ secret=`echo -e "$line"| awk '{split($0,array,"&")} END{print array[3]}'`    
+ bucket=rsed-$account
 
-    echo "Account is $account"
-    echo "Key is $key"
-    echo "Secret is $secret"
-    echo "Bucket is $bucket"
+ echo "Account is $account"
+ echo "Key is $key"
+ echo "Secret is $secret"
+ echo "Bucket is $bucket"
 
-echo "Configuring s3cmd for this account"
-cp /root/.s3cfg /root/.s3cfg.ORIG
-sed '/access_key/d' /root/.s3cfg
-sed '/secret_key/d' /root/.s3cfg
+ echo "Configuring s3cmd for this account"
+ cp /root/.s3cfg /root/.s3cfg.ORIG
+ sed '/access_key/d' /root/.s3cfg
+ sed '/secret_key/d' /root/.s3cfg
   
-cat >> /root/.s3cfg << EOF
+  cat >> /root/.s3cfg << EOF
 access_key = $key
 secret_key = $secret
 EOF
 
-#Just to check keys are set correctly
-grep key /root/.s3cfg
+ #Tester - Just to check keys are set correctly
+ grep key /root/.s3cfg
 
-echo "Now the for loop!!!!!"
+ echo "Now the for loop!!!!!"
 
-for file in `ls labfiles` 
- do
+ for file in `ls labfiles` 
+  do
 
-#Lets check the file for a laugh
-echo labfiles/$file
-file labfiles/$file
+  #Lets check the file for a laugh
+  echo labfiles/$file
+  file labfiles/$file
 
-echo "running s3cmd for file $file using this command"
-echo "s3cmd -v put labfiles/$file s3://$bucket/$file"
-s3cmd -v put labfiles/$file s3://$bucket/$file
+  echo "running s3cmd for file $file using this command"
+  echo "s3cmd -v put labfiles/$file s3://$bucket/$file"
+  s3cmd -v put labfiles/$file s3://$bucket/$file
 
-done
+  done
 
 cp /root/.s3cfg.ORIG /root/.s3cfg
-
 done <accounts
