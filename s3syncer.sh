@@ -6,6 +6,8 @@
 #It then parses the ('&' delimited) file 'accounts' to get RightScale Account Number (accountnum) and corresponding AWS Key & Secret Key
 #Then uploads the contents of 'labfiles' directory to a bucket in this account called 'rsed-accountnum'
 
+accountsfile=accounts
+
 echo "Install S3 Tools"
 yum -y install s3cmd
 
@@ -77,20 +79,19 @@ EOF
  #Tester - Just to check keys are set correctly
  grep key /root/.s3cfg
 
- echo "Now the for loop!!!!!"
 
  for file in `ls labfiles` 
   do
 
   #Lets check the file for a laugh
-  echo labfiles/$file
+  echo "Working on the following file"
   file labfiles/$file
 
-  echo "running s3cmd for file $file using this command"
+  echo "Uploading $file to S3 using this command"
   echo "s3cmd -v put labfiles/$file s3://$bucket/$file"
   s3cmd -v put labfiles/$file s3://$bucket/$file
 
   done
 
 cp /root/.s3cfg.ORIG /root/.s3cfg
-done <accounts
+done <$accountsfile
