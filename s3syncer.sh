@@ -68,8 +68,8 @@ do
 
  echo "Configuring s3cmd for this account"
  cp /root/.s3cfg /root/.s3cfg.ORIG
- sed '/access_key/d' /root/.s3cfg
- sed '/secret_key/d' /root/.s3cfg
+ sed -i '/access_key/d' /root/.s3cfg
+ sed -i '/secret_key/d' /root/.s3cfg
   
   cat >> /root/.s3cfg << EOF
 access_key = $key
@@ -84,13 +84,15 @@ EOF
   do
 
   #Lets check the file for a laugh
-  echo "Working on the following file"
+  echo "*** Working on the following file"
   file labfiles/$file
 
-  echo "Uploading $file to S3 using this command"
-  echo "s3cmd -v put labfiles/$file s3://$bucket/$file"
+  echo "** Uploading $file to S3 using this command"
+  echo "** s3cmd -v put labfiles/$file s3://$bucket/$file"
   s3cmd -v put labfiles/$file s3://$bucket/$file
-
+  echo 
+  echo "+++++++++++++++++++"
+  echo
   done
 
 cp /root/.s3cfg.ORIG /root/.s3cfg
