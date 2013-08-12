@@ -61,12 +61,13 @@ do
  secret=`echo -e "$line"| awk '{split($0,array,"&")} END{print array[3]}'`    
  bucket=rsed-$account
 
+ echo
  echo "Account is $account"
  echo "Key is $key"
  echo "Secret is $secret"
  echo "Bucket is $bucket"
-
- echo "Configuring s3cmd for this account"
+ echo
+ echo "Configuring s3cmd for account $account"
  cp /root/.s3cfg /root/.s3cfg.ORIG
  sed -i '/access_key/d' /root/.s3cfg
  sed -i '/secret_key/d' /root/.s3cfg
@@ -83,15 +84,14 @@ EOF
  for file in `ls labfiles` 
   do
 
-  #Lets check the file for a laugh
+  echo
+  echo "++++++START++++++"
   echo "*** Working on the following file"
   file labfiles/$file
-
   echo "** Uploading $file to S3 using this command"
   echo "** s3cmd -v put labfiles/$file s3://$bucket/$file"
   s3cmd -v put labfiles/$file s3://$bucket/$file
-  echo 
-  echo "+++++++++++++++++++"
+  echo "++++++END++++++"
   echo
   done
 
