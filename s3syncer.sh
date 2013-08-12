@@ -8,7 +8,9 @@
 
 accountsfile=accounts
 
-echo "Install S3 Tools"
+if ! which s3cmd 2>/dev/null ; then
+
+echo "Installing S3 Tools"
 yum -y install s3cmd
 
 cat > /root/.s3cfg << EOF
@@ -53,7 +55,10 @@ verbosity = WARNING
 
 EOF
 
-#Read the file accounts
+else
+    echo "s3cmd already installed"
+
+#Read in the file accounts
 while read line           
 do           
  account=`echo -e "$line"| awk '{split($0,array,"&")} END{print array[1]}'`
@@ -97,3 +102,4 @@ EOF
 
 cp /root/.s3cfg.ORIG /root/.s3cfg
 done <$accountsfile
+fi
