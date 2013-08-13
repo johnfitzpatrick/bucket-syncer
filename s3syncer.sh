@@ -2,7 +2,7 @@
 
 #Written by John Fitzpatrick
 
-#This script installs and config's s3cmd 
+#This script installs and config's s3cmd if not already installed
 #It then parses the ('&' delimited) file 'accounts' to get RightScale Account Number (accountnum) and corresponding AWS Key & Secret Key
 #Then uploads the contents of 'labfiles' directory to a bucket in this account called 'rsed-accountnum'
 
@@ -56,7 +56,7 @@ verbosity = WARNING
 EOF
 
 else
-    echo "s3cmd already installed"
+ echo "s3cmd already installed"
 
 #Read in the file accounts
 while read line           
@@ -84,7 +84,6 @@ EOF
 
  #Tester - Just to check keys are set correctly
  grep key /root/.s3cfg
-
 
  for file in `ls labfiles` 
   do
