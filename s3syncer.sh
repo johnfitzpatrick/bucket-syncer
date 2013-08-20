@@ -102,3 +102,7 @@ EOF
 cp /root/.s3cfg.ORIG /root/.s3cfg
 done <$accountsfile
 fi
+
+# To Do: Create the S3 Bucket Credential in the Account using the API
+# http://reference.rightscale.com/api1.5/resources/ResourceCredentials.html
+
